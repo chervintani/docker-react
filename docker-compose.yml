@@ -1,0 +1,20 @@
+version: "3"
+services:
+  web:
+    build:
+      context: . # specific directory of a Dockerfile
+      dockerfile: Dockerfile.dev # specific file Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules # do not reference to the host
+      - .:/app
+  #this purpose is to run our test
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["yarn", "test"]
