@@ -1,4 +1,4 @@
-language: generic 
+language: generic
 sudo: required
 services:
   - docker
@@ -8,3 +8,16 @@ before_install:
 
 script:
   - docker run -e CI=true chervinvananaz/docker-react yarn test
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "docker"
+  env: "Docker-env"
+  bucket_name: "elasticbeanstalk-us-east-2-875531853150"
+  bucket_path: "docker" #same with the app at the top
+  on:
+    branch: master
+  #pointing to the environment variable
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
