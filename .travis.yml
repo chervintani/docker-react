@@ -2,12 +2,20 @@ language: generic
 sudo: required
 services:
   - docker
-
+  - aws
 before_install:
   - docker build -t chervinvananaz/docker-react -f Dockerfile.dev .
 
 script:
   - docker run -e CI=true chervinvananaz/docker-react yarn test
+
+after_success:
+  - docker build -t chervinvananaz/docker-react .
+  # Login first to docker CLI
+  - aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 875531853150.dkr.ecr.ap-southeast-1.amazonaws.com
+  # Take those image and push them to Dockerhub
+  - docker tag docker-react:latest 875531853150.dkr.ecr.ap-southeast-1.amazonaws.com/docker-react:latest
+  - docker push 875531853150.dkr.ecr.ap-southeast-1.amazonaws.com/docker-react:latest
 
 deploy:
   provider: elasticbeanstalk
