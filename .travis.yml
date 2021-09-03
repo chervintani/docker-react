@@ -2,7 +2,7 @@ language: generic
 sudo: required
 services:
   - docker
-  - aws
+  - awscli
 before_install:
   - docker build -t chervinvananaz/docker-react -f Dockerfile.dev .
 
